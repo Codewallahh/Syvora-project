@@ -1,0 +1,26 @@
+# k8s/mongo-values.yaml
+# Simple, explicit values for Bitnami MongoDB Helm chart
+
+# Release uses a single primary pod (replicaCount 1) for simplicity
+replicaCount: 1
+
+auth:
+  # Root username and password used to connect from your app
+  rootUser: root
+  rootPassword: example
+  # database to create at init
+  database: appdb
+
+# Persistence: leave true to store data across restarts (uses local-path-storage in kind)
+persistence:
+  enabled: true
+  storageClass: "local-path"   # kind's default storage class
+  size: 1Gi
+
+service:
+  type: ClusterIP
+  port: 27017
+
+metrics:
+  enabled: false  # set to true if you want MongoDB metrics scraped
+

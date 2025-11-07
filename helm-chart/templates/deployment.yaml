@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "assignment-backend.fullname" . }}
+  labels:
+    app: {{ include "assignment-backend.name" . }}
+    release: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "assignment-backend.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "assignment-backend.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: backend
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+              name: http
+          env:
+            - name: MONGO_URI
+              value: "mongodb+srv://tiwarikartikey777:HrcvSeaGfbKbh1pI@cluster0.6w2iedb.mongodb.net/"
+            - name: PORT
+              value: "{{ .Values.service.port }}"
+            - name: NODE_ENV
+              value: "production"
+#          readinessProbe:
+#            httpGet:
+#              path: "/health"
+#              port: {{ .Values.probes.readiness.port }}
+#            initialDelaySeconds: 5
+#            periodSeconds: 10
+#          livenessProbe:
+#            httpGet:
+#              path: "/health"
+#              port: {{ .Values.probes.liveness.port }}
+#            initialDelaySeconds: 10
+#            periodSeconds: 20
+
