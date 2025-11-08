@@ -1,4 +1,4 @@
-# 🚀 Full-Stack DevOps Assignment — Node.js Web Server + CI/CD + Kubernetes + Monitoring
+# 🚀  DevOps Assignment — Node.js Web Server + CI/CD + Kubernetes + Monitoring
 
 ## 👤 Author
 **Name:** Kartikey Tiwari  
@@ -39,7 +39,6 @@ project-root/
 │   ├── templates/
 │   │   ├── deployment.yaml
 │   │   ├── service.yaml
-│   │   ├── hpa.yaml
 │   │   └── ingress.yaml
 │   └── values.yaml
 │
@@ -62,7 +61,7 @@ project-root/
 | Category | Feature | Description |
 |-----------|----------|-------------|
 | **Backend** | CRUD APIs | Create, Read, Update, Delete user data |
-| **Database** | PostgreSQL | Persistent data storage |
+| **Database** | MongoDB | Persistent data storage |
 | **Dockerization** | `Dockerfile` + `docker-compose.yml` | App + DB run locally in containers |
 | **CI/CD** | GitHub Actions | Auto build & push image to Docker Hub on main branch push |
 | **Infrastructure** | Terraform | Optional IaC setup for Kubernetes cluster |
@@ -89,13 +88,13 @@ npm install
 npm start
 
 ### **Database**
-Using PostgreSQL via Docker Compose.
+Using MongoDB via Docker Compose.
 
 docker-compose up -d
 
 Access:
 - API → http://localhost:5000
-- Database → localhost:5432
+- Database → localhost:27017
 
 ---
 
