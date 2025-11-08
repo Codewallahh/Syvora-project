@@ -110,22 +110,43 @@ EXPOSE 5000
 CMD ["npm", "start"]
 
 ### **docker-compose.yml**
-version: '3.8'
+version: "3.8"
+
 services:
-  app:
-    build: ./backend
+  mongo:
+    image: mongo:7.0
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "${MONGO_INITDB_ROOT_USERNAME}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGO_INITDB_ROOT_PASSWORD}"
+      MONGO_INITDB_DATABASE: "${MONGO_INITDB_DATABASE}"
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      - mongo
+    environment:
+      # Backend reads the connection string from process.env.MONGO_URI
+      MONGO_URI: "${MONGO_URI}"
+      PORT: "${PORT:-5000}"
+      NODE_ENV: "${NODE_ENV:-production}"
     ports:
       - "5000:5000"
-    depends_on:
-      - db
-  db:
-    image: postgres:15
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: pass
-      POSTGRES_DB: testdb
-    ports:
-      - "5432:5432"
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
 
 Run both containers:
 docker-compose up -d
